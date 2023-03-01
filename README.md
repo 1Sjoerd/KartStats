@@ -20,6 +20,6 @@ Contextdiagram:
 <br><br>
 ![Context Diagram](KartStats/Images/ContextDiagram.png)
 
-Conceptueel model:
+<br>Conceptueel model:
 <br><br>
 ![Conceptueel Model](KartStats/Images/ConceptueelModel.png)
