@@ -23,3 +23,5 @@ Contextdiagram:
 <br>Conceptueel model:
 <br><br>
 ![Conceptueel Model](KartStats/Images/ConceptueelModel.png)
+
+![Conceptueel Model](KartStats/Images/Schets.png)
