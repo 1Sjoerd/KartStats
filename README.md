@@ -17,8 +17,9 @@ Als hobby karter zou ik graag een overzicht van alle resultaten van gereden heat
 ## Contextdiagram en Conceptueel model
 
 Contextdiagram:
-<br>
+<br><br>
 ![Context Diagram](KartStats/Images/ContextDiagram.png)
 
 Conceptueel model:
+<br><br>
 ![Conceptueel Model](KartStats/Images/ConceptueelModel.png)
