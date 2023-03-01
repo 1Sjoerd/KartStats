@@ -13,3 +13,13 @@ Als hobby karter zou ik graag een overzicht van alle resultaten van gereden heat
 - Als karter wil ik de resultaten van andere in dezelfde heat kunnen inzien
 - Als karter wil ik de gemiddelde rondetijden per rijder per heat kunnen zien
 - Als karter wil ik de snelste tijd per heat en per circuit kunnen zien
+
+## Contextdiagram en Conceptueel model
+
+Contextdiagram:
+<br><br>
+![Context Diagram](KartStats/Images/ContextDiagram.png)
+
+<br>Conceptueel model:
+<br><br>
+![Conceptueel Model](KartStats/Images/ConceptueelModel.png)
