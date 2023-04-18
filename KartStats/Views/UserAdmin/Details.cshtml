@@ -1,4 +1,4 @@
-﻿@model KartStats.Models.UserAdminClass
+﻿@model KartStats.Models.Driver
 
 @{
     ViewData["Title"] = "Details";
@@ -23,22 +23,10 @@
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Mobile)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Mobile)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Source)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Source)
         </dd>
     </dl>
 </div>

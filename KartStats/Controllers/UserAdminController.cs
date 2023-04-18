@@ -1,48 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using KartStats.Data;
+﻿using System.Threading.Tasks;
+using KartStats.BLL;
+using KartStats.DAL;
 using KartStats.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KartStats.Controllers
 {
     [Authorize]
     public class UserAdminController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IKartStatsBLL _IKartStatsBLL;
 
-        public UserAdminController(ApplicationDbContext context)
+        public UserAdminController()
         {
-            _context = context;
+            _IKartStatsBLL = new KartStatsBLL(new KartStatsDAL());
         }
 
         // GET: UserAdmin
         public async Task<IActionResult> Index()
         {
-              return View(await _context.UserAdmin.ToListAsync());
+            var users = _IKartStatsBLL.GetDrivers();
+            return View(users);
         }
 
         // GET: UserAdmin/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.UserAdmin == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var userAdminClass = await _context.UserAdmin
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (userAdminClass == null)
+            var user = _IKartStatsBLL.GetDriverById(id.Value);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(userAdminClass);
+            return View(user);
         }
 
         // GET: UserAdmin/Create
@@ -52,45 +48,41 @@ namespace KartStats.Controllers
         }
 
         // POST: UserAdmin/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Mobile,Email,Source")] UserAdminClass userAdminClass)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Age,Email")] Driver driver)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(userAdminClass);
-                await _context.SaveChangesAsync();
+                _IKartStatsBLL.AddDriver(driver);
                 return RedirectToAction(nameof(Index));
             }
-            return View(userAdminClass);
+            return View(driver);
         }
 
         // GET: UserAdmin/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.UserAdmin == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var userAdminClass = await _context.UserAdmin.FindAsync(id);
-            if (userAdminClass == null)
+            var user = _IKartStatsBLL.GetDriverById(id.Value);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(userAdminClass);
+
+            return View(user);
         }
 
         // POST: UserAdmin/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Mobile,Email,Source")] UserAdminClass userAdminClass)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Age,Email")] Driver driver)
         {
-            if (id != userAdminClass.Id)
+            if (id != driver.Id)
             {
                 return NotFound();
             }
@@ -99,12 +91,11 @@ namespace KartStats.Controllers
             {
                 try
                 {
-                    _context.Update(userAdminClass);
-                    await _context.SaveChangesAsync();
+                    _IKartStatsBLL.UpdateDriver(driver);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!UserAdminClassExists(userAdminClass.Id))
+                    if (_IKartStatsBLL.GetDriverById(driver.Id) == null)
                     {
                         return NotFound();
                     }
@@ -113,27 +104,28 @@ namespace KartStats.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(userAdminClass);
+
+            return View(driver);
         }
 
         // GET: UserAdmin/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.UserAdmin == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var userAdminClass = await _context.UserAdmin
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (userAdminClass == null)
+            var user = _IKartStatsBLL.GetDriverById(id.Value);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(userAdminClass);
+            return View(user);
         }
 
         // POST: UserAdmin/Delete/5
@@ -141,23 +133,8 @@ namespace KartStats.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.UserAdmin == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.UserAdmin'  is null.");
-            }
-            var userAdminClass = await _context.UserAdmin.FindAsync(id);
-            if (userAdminClass != null)
-            {
-                _context.UserAdmin.Remove(userAdminClass);
-            }
-            
-            await _context.SaveChangesAsync();
+            _IKartStatsBLL.DeleteDriver(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool UserAdminClassExists(int id)
-        {
-          return _context.UserAdmin.Any(e => e.Id == id);
         }
     }
 }
